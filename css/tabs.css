@@ -1,0 +1,93 @@
+/* Tabs Container */
+.tabs-container {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
+
+.tabs {
+    display: flex;
+    gap: 15px;
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px var(--shadow);
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+/* Tab Buttons */
+.tab-button {
+    flex: 1;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 15px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    outline: none; /* Remove outline */
+    text-decoration: none; /* Remove any text decoration */
+}
+
+.tab-button:focus {
+    outline: none; /* Remove focus outline */
+}
+
+.tab-button * {
+    border: none; /* Remove any borders from child elements */
+    outline: none; /* Remove any outlines from child elements */
+}
+
+.tab-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-1), var(--accent-2));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.tab-button:hover::before {
+    opacity: 0.1;
+}
+
+.tab-button.active {
+    background: var(--tab-active);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+}
+
+.tab-icon {
+    font-size: 1.2em;
+}
+
+.tab-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    min-width: 24px;
+}
+
+@media screen and (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+    
+    .tab-button {
+        padding: 8px 12px; /* Adjust padding for mobile */
+    }
+}

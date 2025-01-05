@@ -1,0 +1,205 @@
+/* footer.css */
+.site-footer {
+    background: var(--background);
+    padding: 40px 0;
+    margin-top: 80px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+}
+
+.base-tag {
+    color: rgb(102, 102, 102);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.base-tag img {
+    height: 24px;
+    width: auto;
+}
+
+.legal-link a {
+    color: rgb(102, 102, 102);
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.legal-link a:hover {
+    color: var(--accent-1);
+}
+
+.footer-social {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(102, 102, 102);
+    transition: color 0.2s ease;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.social-link:hover {
+    color: var(--accent-1);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.social-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+.copyright {
+    color: rgb(102, 102, 102);
+    font-size: 14px;
+}
+
+.token-address {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgb(247, 248, 250);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.token-address span {
+    color: rgb(102, 102, 102);
+    font-size: 14px;
+}
+
+.token-address .address {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.token-address .copy-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(102, 102, 102);
+    transition: color 0.2s ease;
+}
+
+.token-address:hover {
+    background: rgb(240, 242, 245);
+}
+
+.token-address:hover .copy-button {
+    color: var(--accent-1);
+}
+
+.copy-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.copy-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.copy-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .site-footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .token-address {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .token-address:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .social-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .site-footer {
+        padding: 32px 0;
+    }
+
+    .footer-content {
+        gap: 20px;
+        padding: 0 16px;
+    }
+
+    .base-tag {
+        font-size: 14px;
+    }
+
+    .footer-social {
+        gap: 20px;
+    }
+
+    .token-address {
+        padding: 10px 16px;
+    }
+
+    .token-address span {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .footer-social {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .token-address {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

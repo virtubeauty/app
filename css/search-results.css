@@ -1,0 +1,72 @@
+/* search-results.css */
+.search-results-container {
+    max-width: 1400px; /* Match agent-grid max-width */
+    margin: 20px auto;
+    padding: 0 20px; /* Match agent-grid padding */
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px var(--shadow);
+    display: none;
+}
+
+.search-results-container.active {
+    display: block;
+}
+
+.search-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-results-title {
+    font-size: 1.2em;
+    color: var(--text-primary);
+}
+
+.search-query {
+    color: var(--accent-1);
+    font-weight: bold;
+}
+
+.clear-search {
+    padding: 8px 16px;
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clear-search:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+
+/* Update search input styles since we removed the button */
+.search-input {
+    width: 100%;
+    max-width: 600px; /* Increased width since we removed the button */
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+    .search-results-container {
+        padding: 10px; /* Match agent-grid mobile padding */
+        margin: 10px auto;
+    }
+    
+    .search-results-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 15px;
+    }
+}

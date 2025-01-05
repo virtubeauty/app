@@ -1,0 +1,88 @@
+/* Copy Tooltip Base Styles */
+.copy-tooltip {
+    position: absolute;
+    background: var(--accent-1);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* Show Tooltip */
+.copy-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Tooltip Arrow */
+.copy-tooltip::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+}
+
+/* Address Tooltip Specific */
+.agent-address .copy-tooltip {
+    top: -35px;
+}
+
+.agent-address .copy-tooltip::after {
+    top: 100%;
+    border-top-color: var(--accent-1);
+}
+
+/* Token Address Tooltip Specific */
+.token-address .copy-tooltip {
+    bottom: calc(100% + 10px);
+}
+
+.token-address .copy-tooltip::after {
+    bottom: -10px;
+    border-top-color: var(--accent-1);
+}
+
+/* Social Link Tooltip */
+.social-link .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    background: var(--accent-1);
+    color: white;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.social-link .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--accent-1);
+}
+
+.social-link:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-2px);
+}

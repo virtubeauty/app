@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KQNJZ5HB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-6KQNJZ5HB4');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Virtuals Agents Hub - Making virtual agents easier, practical, and useful for everyone. Explore our prototype, latest, and sentient virtual agents.">
+    <meta name="keywords" content="virtual agents, AI agents, virtubeauty.fun, virtual assistants, AI prototype">
+    <meta name="author" content="virtubeauty.fun">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="VirtuBeauty Agents Hub - Making Virtual Easier">
+    <meta property="og:description"
+        content="Explore and interact with virtual agents. Making virtual easier, practical, and useful for everyone.">
+    <meta property="og:url" content="https://app.virtubeauty.fun/">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@VirtuBeauty">
+    <meta name="twitter:title" content="Virtuals Agents Hub">
+    <meta name="twitter:description" content="Making virtual easier, practical, and useful for everyone.">
+
+    <title>Virtuals Agents Hub | Making Virtual Easier</title>
+
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="css/base.css" as="style">
+    <link rel="preload" href="css/components.css" as="style">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="css/agent-card.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/tooltips.css">
+    <link rel="stylesheet" href="css/social-icons.css">
+    <link rel="stylesheet" href="css/search-results.css">
+    <link rel="stylesheet" href="css/toast.css">
+
+    <!-- JavaScript Files - Load in specific order -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/favorite.js"></script>
+    <script src="js/clipboard.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/auto-refresh.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="logo-container">
+            <a href="https://virtubeauty.fun" target="_blank">
+                <img src="assets/logo.png" alt="VirtuBeauty Logo" class="site-logo">
+            </a>
+        </div>
+
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light theme">
+            <span class="theme-icon" aria-hidden="true">🌓</span>
+        </button>
+        <div class="header">
+            <h1>
+                <a href="https://virtubeauty.fun/" target="_blank" rel="noopener noreferrer"
+                    class="virtual-link virtual-link-gradient">
+                    VirtuBeauty
+                </a>
+                <span class="header-text">WHERE</span>
+                <a href="https://app.virtuals.io/" class="virtual-link" target="_blank" rel="noopener noreferrer">
+                    Virtual
+                </a>
+                <span class="header-text">Meets Practical Perfection</span>
+            </h1>
+        </div>
+
+        <div class="search-container">
+            <input type="text" placeholder="Search Agent" class="search-input" id="searchInput">
+        </div>
+    </header>
+
+    <div class="search-results-container">
+        <div class="search-results-header">
+            <h2 class="search-results-title">Search Results for "<span class="search-query"></span>"</h2>
+            <button class="clear-search">Clear Search</button>
+        </div>
+        <div class="search-results-grid"></div>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs-header">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="favorites">
+                    <span class="tab-icon">⭐</span>
+                    <span class="tab-text hide-mobile">Favorites</span>
+                    <span class="tab-count" id="favoritesCount">0</span>
+                </button>
+                <button class="tab-button" data-tab="prototype">
+                    <span class="tab-icon">🤖</span>
+                    <span class="tab-text hide-mobile">Prototype</span>
+                </button>
+                <button class="tab-button" data-tab="latest">
+                    <span class="tab-icon">🐣</span>
+                    <span class="tab-text hide-mobile">Latest</span>
+                </button>
+                <button class="tab-button" data-tab="sentient">
+                    <span class="tab-icon">🧠</span>
+                    <span class="tab-text hide-mobile">Sentient</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main id="content">
+        <section class="agent-grid" id="agentGrid" aria-label="Agent listings"></section>
+        <nav class="pagination" id="pagination" aria-label="Page navigation"></nav>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="base-tag">
+                A Public Good for <img
+                    src="https://app.virtuals.io/static/media/base.1b4ca2b85af68664bd172256e0e1769c.svg" alt="BASE">
+            </div>
+
+            <div class="legal-link">
+                <a href="/legal">Legal Disclaimer</a>
+            </div>
+
+            <div class="footer-social">
+                <!-- <a href="https://t.me/VirtuBeautyDao" target="_blank" rel="noopener noreferrer" class="social-link"></a> -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="https://app.virtuals.io/static/media/tgGray.6083d11dd277b25e41a73702f8045ea1.svg"
+                        alt="Telegram">
+                </a>
+                <a href="https://x.com/VirtuBeauty" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <img src="https://app.virtuals.io/static/media/twitterGray.d3c0a43eb983ee581b81c4f26c413d45.svg"
+                        alt="Twitter">
+                </a>
+            </div>
+
+            <div class="copyright">© 2025 VIRTUALS.io All Rights Reserved.</div>
+
+            <div class="token-address" data-address="0xd8da6bf26964af9d7eed9e03e53415d37aa96045">
+                <span>$VIRTUAL</span>
+                <span class="address">0xd8da6bf26964af9d7eed9e03e53415d37aa96045</span>
+                <button class="copy-button" aria-label="Copy address">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <div class="copy-tooltip">Copied!</div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+/* Social Links Base Styles */
+.social-link {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.social-link img,
+.social-link svg {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    transition: all 0.2s ease;
+}
+
+/* Light mode styles */
+:root {
+    --social-icon-color: rgba(99, 110, 114, 0.8);
+    --social-icon-hover: var(--accent-1);
+    --social-bg-hover: rgba(108, 92, 231, 0.1);
+}
+
+/* Dark mode styles */
+[data-theme="dark"] {
+    --social-icon-color: rgba(255, 255, 255, 0.8);
+    --social-icon-hover: var(--accent-1);
+    --social-bg-hover: rgba(108, 92, 231, 0.2);
+}
+
+/* Base icon colors */
+.social-link img,
+.social-link svg {
+    fill: var(--social-icon-color);
+    color: var(--social-icon-color);
+}
+
+[data-theme="dark"] .social-link-bright img {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%) opacity(0.8);
+}
+
+/* Hover Effects */
+.social-link:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-1);
+    background: var(--social-bg-hover);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+}
+
+.social-link:hover img,
+.social-link:hover svg {
+    fill: var(--social-icon-hover);
+    color: var(--social-icon-hover);
+}
+
+[data-theme="dark"] .social-link:hover img {
+    filter: brightness(0) saturate(100%) invert(67%) sepia(9%) saturate(6666%) hue-rotate(208deg) brightness(101%) contrast(91%);
+}
+
+/* Dark Mode Specific Styles */
+[data-theme="dark"] .social-link {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .social-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-1);
+}
+
+/* Platform-specific adjustments */
+.social-link[href*="telegram"] {
+    padding: 0;
+}
+
+.social-link[href*="telegram"] img,
+.social-link[href*="twitter"] img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tooltip styles */
+.social-link .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    background: var(--accent-1);
+    color: white;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.social-link:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-2px);
+}
