@@ -145,6 +145,7 @@ function switchTab(tabName) {
 }
 
 // Agent Fetching
+// Modified fetchAgents function in app.js
 async function fetchAgents() {
     showLoading();
     try {
@@ -164,6 +165,32 @@ async function fetchAgents() {
             favorites.forEach(id => {
                 params.append('filters[id][$in]', id);
             });
+        }
+
+        // Add holder count filters
+        if (filters.holderCount.min) {
+            params.append('filters[holderCount][$gte]', filters.holderCount.min);
+        }
+        if (filters.holderCount.max) {
+            params.append('filters[holderCount][$lte]', filters.holderCount.max);
+        }
+
+        // Add virtual token value filters
+        if (filters.virtualTokenValue.min) {
+            const minApiValue = filters.virtualTokenValue.min / state.prices['virtual-protocol'];
+            params.append('filters[virtualTokenValue][$gte]', minApiValue);
+        }
+        if (filters.virtualTokenValue.max) {
+            const maxApiValue = filters.virtualTokenValue.max / state.prices['virtual-protocol'];
+            params.append('filters[virtualTokenValue][$lte]', maxApiValue);
+        }
+
+        if (filters.createdAt) {
+            params.append('filters[createdAt][$gte]', filters.createdAt);
+        }
+
+        if (filters.role) {
+            params.append('filters[role]', filters.role);
         }
 
         const response = await fetch(`${config.url}?${params}`);

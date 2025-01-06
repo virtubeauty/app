@@ -20,14 +20,6 @@ function truncateText(text, maxLength = 100) {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
 
-// function formatMoney(amount) {
-//     const num = parseFloat(amount);
-//     if (isNaN(num)) {
-//         throw new Error('Invalid amount. Please provide a valid number.');
-//     }
-//     return '$' + num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-// }
-
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
