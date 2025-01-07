@@ -219,6 +219,10 @@
     .header h1 .header-text {
         font-size: 0.35em;
     }
+
+    .site-logo {
+        width: 50px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -228,6 +232,10 @@
     
     .header h1 .header-text {
         font-size: 0.3em;
+    }
+
+    .site-logo {
+        width: 50px;
     }
 }
 
