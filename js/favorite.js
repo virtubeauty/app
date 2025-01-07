@@ -1,5 +1,6 @@
 // Constants
-const MAX_FAVORITES = 20;
+const MAX_FAVORITES = 5;
+window.MAX_FAVORITES = MAX_FAVORITES;
 
 // Toast Notifications
 function showToast(message, type = 'error') {
@@ -56,11 +57,16 @@ function toggleFavorite(button, agentId) {
     const favorites = getFavorites();
     const agentIdStr = agentId.toString();
     const index = favorites.indexOf(agentIdStr);
-    
+
     if (index === -1) {
         // Add to favorites
         if (favorites.length >= MAX_FAVORITES) {
-            showToast(`Maximum limit of ${MAX_FAVORITES} favorites reached`);
+            const isPremium = localStorage.getItem('walletPremium') === 'true';
+            if (!isPremium) {
+                showToast(`Connect wallet for premium features and increase your favorites limit to 50!`, 'error');
+            } else {
+                showToast(`Maximum limit of ${MAX_FAVORITES} favorites reached`, 'error');
+            }
             return;
         }
         favorites.push(agentIdStr);
@@ -74,7 +80,7 @@ function toggleFavorite(button, agentId) {
         button.title = 'Add to favorites';
         showToast('Removed from favorites', 'success');
     }
-    
+
     saveFavorites(favorites);
     updateFavoritesCount();
 }
