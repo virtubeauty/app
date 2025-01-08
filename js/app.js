@@ -106,8 +106,8 @@ function initializeApp() {
     updateFavoritesCount();
 
     // Set initial theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
+    //const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme('dark');
 
     // Initialize prices
     fetchPrices();
