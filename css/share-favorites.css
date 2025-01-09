@@ -1,0 +1,137 @@
+/* share-favorites.css */
+
+/* Global Share Container */
+.global-share-container {
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    padding: 15px 20px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.share-buttons-wrapper {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Global Share Button Styles */
+.global-share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 160px;
+}
+
+.global-share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+/* Get Link Button */
+.global-share-btn.get-link:hover {
+    background: var(--accent-1);
+    color: white;
+    border-color: var(--accent-1);
+}
+
+/* Share on X Button */
+.global-share-btn.share-x:hover {
+    background: #000000;
+    color: white;
+    border-color: #000000;
+}
+
+.share-icon {
+    font-size: 1.2em;
+}
+
+/* Shared Favorites Container */
+.shared-favorites-container {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.shared-favorites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.shared-favorites-header h2 {
+    font-size: 1.5em;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.add-all-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent-1);
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.add-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+}
+
+.shared-favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .global-share-btn {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .shared-favorites-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .share-buttons-wrapper {
+        flex-direction: column;
+    }
+
+    .global-share-btn {
+        width: 100%;
+    }
+
+    .shared-favorites-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .shared-favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 15px;
+    }
+}

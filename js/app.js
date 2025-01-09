@@ -1,5 +1,5 @@
 // app.js
-async function fetchPrices(useMockData = false) {
+async function fetchPrices(useMockData = true) {
     const CACHE_KEY = 'crypto_prices';
     const CACHE_DURATION = 60 * 1000; // 60 seconds in milliseconds
 
