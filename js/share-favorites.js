@@ -2,7 +2,7 @@
 
 // Constants for sharing
 const SHARE_CONFIG = {
-    baseUrl: 'https://app.virtubeaty.fun',
+    baseUrl: 'https://app.virtubeauty.fun',
     xMessage: 'Check out my favorite virtual agents! 🤖✨',
     xHashtags: ['VirtuBeauty']
 };
