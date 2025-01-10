@@ -39,8 +39,8 @@ async function handleVote(itemId, voteType) {
     if (!checkPremiumAccess()) return;
 
     if (itemId == 17777) {
-        window.open('https://vbeaideas.featurebase.app/', '_blank'); // '_blank' yeni sekmede açar.
-        return; // Diğer işlemleri durdurmak için.
+        window.open('https://vbeaideas.featurebase.app/', '_blank');
+        return;
     }
 
     const button = document.querySelector(`[data-agent-id="${itemId}"] .vote-button.${voteType === VOTE_TYPES.UPVOTE ? 'upvote' : 'downvote'}`);
@@ -144,7 +144,7 @@ async function fetchBatchFlagCounts(itemIds) {
         console.log('Flag counts data:', data);
 
         // Update cache and UI
-        data.forEach(({itemId, flagCount}) => {
+        data.forEach(({ itemId, flagCount }) => {
             flagCountCache.set(itemId, flagCount || 0);
             updateFlagCount(itemId, flagCount || 0);
         });
@@ -170,34 +170,60 @@ function updateFlagCount(itemId, count) {
 function showFlagDialog(itemId) {
     if (!checkPremiumAccess()) return;
 
-    if (itemId == 17777) {
-        window.open('https://vbeaideas.featurebase.app/', '_blank'); // '_blank' yeni sekmede açar.
-        return; // Diğer işlemleri durdurmak için.
-    }
-
     const dialog = document.createElement('div');
     dialog.className = 'flag-dialog';
     dialog.innerHTML = `
         <div class="flag-dialog-content">
             <h3>Flag Content</h3>
-            <textarea placeholder="Please describe why you are flagging this content..." 
-                      class="flag-reason"></textarea>
+            <div class="flag-input-container">
+                <textarea 
+                    placeholder="Please describe why you are flagging this content... (minimum 10 characters)" 
+                    class="flag-reason"
+                    minlength="10"></textarea>
+                <div class="character-count" style="color: var(--text-secondary); font-size: 0.9em; margin-top: 4px;">
+                    0/10 characters minimum
+                </div>
+                <div class="warning-message" style="color: #f44336; font-size: 0.9em; margin-top: 4px; display: none;">
+                    Please enter at least 10 characters
+                </div>
+            </div>
             <div class="flag-dialog-buttons">
                 <button class="cancel-flag">Cancel</button>
-                <button class="submit-flag">Submit</button>
+                <button class="submit-flag" disabled>Submit</button>
             </div>
         </div>
     `;
 
     document.body.appendChild(dialog);
 
+    const textarea = dialog.querySelector('.flag-reason');
+    const charCount = dialog.querySelector('.character-count');
+    const warning = dialog.querySelector('.warning-message');
+    const submitButton = dialog.querySelector('.submit-flag');
+
+    // Update character count and validate input
+    textarea.addEventListener('input', () => {
+        const length = textarea.value.trim().length;
+        charCount.textContent = `${length}/10 characters minimum`;
+
+        if (length < 10) {
+            warning.style.display = 'block';
+            submitButton.disabled = true;
+            textarea.style.borderColor = '#f44336';
+        } else {
+            warning.style.display = 'none';
+            submitButton.disabled = false;
+            textarea.style.borderColor = 'var(--border)';
+        }
+    });
+
     const handleClose = () => dialog.remove();
 
     dialog.querySelector('.cancel-flag').onclick = handleClose;
     dialog.querySelector('.submit-flag').onclick = async () => {
-        const reason = dialog.querySelector('.flag-reason').value.trim();
-        if (!reason) {
-            showToast('Please provide a reason for flagging', 'error');
+        const reason = textarea.value.trim();
+        if (reason.length < 10) {
+            warning.style.display = 'block';
             return;
         }
         await handleFlag(itemId, reason);
@@ -211,6 +237,39 @@ function showFlagDialog(itemId) {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') handleClose();
     }, { once: true });
+}
+
+// Update the handleFlag function to include validation
+async function handleFlag(itemId, reason) {
+    if (!checkPremiumAccess()) return;
+
+    if (reason.trim().length < 10) {
+        showToast('Flag reason must be at least 10 characters', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(getVotingApiUrl(API_CONFIG.voting.endpoints.flag), {
+            method: 'POST',
+            headers: API_CONFIG.voting.headers,
+            body: JSON.stringify({
+                itemId,
+                userWalletAddress: window.walletConnect.account,
+                reason: reason.trim()
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Failed to submit flag');
+        }
+
+        await fetchBatchFlagCounts([itemId]);
+        showToast('Content flagged successfully', 'success');
+    } catch (error) {
+        console.error('Flag error:', error);
+        showToast(error.message, 'error');
+    }
 }
 
 // Show flag details modal
@@ -343,7 +402,7 @@ async function initializeFlagCounts(agentIds) {
             const data = await response.json();
             console.log('Flag Counts Data:', data);
 
-            data.forEach(({itemId, flagCount}) => {
+            data.forEach(({ itemId, flagCount }) => {
                 flagCountCache.set(itemId, flagCount || 0);
                 updateFlagCount(itemId, flagCount || 0);
             });
