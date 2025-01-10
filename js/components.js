@@ -106,7 +106,7 @@ function createAgentCard(agent, type = 'prototype', votingData = null) {
                     <span class="tooltip">View on Virtuals</span>
                 </a>
             </div>
-            ${agent.id == 17890 ? `<div class="voting-controls">
+            <div class="voting-controls">
             <button class="vote-button upvote" onclick="window.voting.handleVote('${agent.id}', window.voting.VOTE_TYPES.UPVOTE)">
                 <span>👍</span>
                 <span class="upvote-count">${upvotes}</span>
@@ -124,7 +124,7 @@ function createAgentCard(agent, type = 'prototype', votingData = null) {
                 <span>Flags</span>
             </button>
             <span class="vote-ratio">${ratio}</span>
-        </div>` : ''}
+        </div>
     </div>
     `;
 }
