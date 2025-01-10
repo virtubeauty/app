@@ -99,6 +99,34 @@ async function handleSharedFavorites() {
 
         const data = await response.json();
 
+        // Get all agent IDs
+        const agentIds = data.data.map(agent => agent.id);
+
+        // Get voting data first
+        let votingResults = [];
+        try {
+            const params = new URLSearchParams();
+            agentIds.forEach(id => params.append('itemIds', id));
+
+            const votingResponse = await fetch(`${API_CONFIG.voting.baseUrl}/api/voting/batch-vote-counts?${params}`);
+            if (votingResponse.ok) {
+                votingResults = await votingResponse.json();
+            }
+        } catch (error) {
+            console.error('Error fetching voting data:', error);
+            votingResults = agentIds.map(() => null);
+        }
+
+        // Create voting data map
+        const votingMap = new Map();
+        data.data.forEach((agent, index) => {
+            votingMap.set(agent.id, votingResults[index] || {
+                upvoteCount: 0,
+                downvoteCount: 0,
+                upvoteRatio: 0
+            });
+        });
+
         // Show shared results container
         const sharedContainer = document.createElement('div');
         sharedContainer.className = 'shared-favorites-container';
@@ -114,7 +142,7 @@ async function handleSharedFavorites() {
 
         const grid = sharedContainer.querySelector('.shared-favorites-grid');
         grid.innerHTML = data.data
-            .map(agent => createAgentCard(agent))
+            .map(agent => createAgentCard(agent, null, votingMap.get(agent.id)))
             .join('');
 
         // Insert before the main content

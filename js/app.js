@@ -65,87 +65,7 @@ function showError(message) {
     }
 }
 
-function updatePagination() {
-    const paginationElement = document.getElementById('pagination');
-    if (!paginationElement) return;
-
-    paginationElement.innerHTML = `
-        <button onclick="changePage(${state.currentPage - 1})" ${state.currentPage === 1 ? 'disabled' : ''}>Previous</button>
-        <button disabled>Page ${state.currentPage} of ${state.totalPages}</button>
-        <button onclick="changePage(${state.currentPage + 1})" ${state.currentPage === state.totalPages ? 'disabled' : ''}>Next</button>
-    `;
-}
-
-// Tab Management
-function switchTab(tabName) {
-    if (!tabName || !API_CONFIG[tabName]) return;
-
-    state.currentTab = tabName;
-    state.currentPage = 1;
-    localStorage.setItem('currentTab', tabName);
-
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.toggle('active', button.dataset.tab === tabName);
-    });
-
-    fetchAgents();
-}
-
-// Navigation
-async function changePage(newPage) {
-    if (newPage < 1 || newPage > state.totalPages) return;
-    state.currentPage = newPage;
-    await fetchAgents();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-
-// Initialize Application
-function initializeApp() {
-    // Initialize favorites count
-    updateFavoritesCount();
-
-    // Set initial theme
-    //const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme('dark');
-
-    // Initialize prices
-    fetchPrices();
-    setInterval(fetchPrices, 60000);
-
-    // Set up tab buttons
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.addEventListener('click', () => switchTab(button.dataset.tab));
-    });
-
-    // Load initial tab
-    const savedTab = localStorage.getItem('currentTab') || 'prototype';
-    switchTab(savedTab);
-}
-
-// Tab Management
-function switchTab(tabName) {
-    if (!tabName || !API_CONFIG[tabName]) return;
-
-    // Update state and localStorage
-    state.currentTab = tabName;
-    state.currentPage = 1;
-    localStorage.setItem('currentTab', tabName);
-
-    // Update UI
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.toggle('active', button.dataset.tab === tabName);
-    });
-
-    // Update favorites count
-    updateFavoritesCount();
-
-    // Fetch agents for the new tab
-    fetchAgents();
-}
-
-// Agent Fetching
-// Modified fetchAgents function in app.js
+// Modified fetchAgents function
 async function fetchAgents() {
     showLoading();
     try {
@@ -200,12 +120,40 @@ async function fetchAgents() {
         state.totalPages = data.meta.pagination.pageCount;
         state.tabCounts[state.currentTab] = data.meta.pagination.total;
 
+        // Fetch voting data in batch
+        let votingParams = new URLSearchParams();
+        data.data.forEach(agent => {
+            votingParams.append('itemIds', agent.id);
+        });
+
+        const votingResponse = await fetch(`${API_CONFIG.voting.baseUrl}/api/voting/batch-vote-counts?${votingParams}`);
+        const votingResults = votingResponse.ok ? await votingResponse.json() : [];
+
+        // Create a map of voting data
+        const votingMap = new Map();
+        data.data.forEach((agent, index) => {
+            votingMap.set(agent.id, votingResults[index] || {
+                upvoteCount: 0,
+                downvoteCount: 0,
+                upvoteRatio: 0
+            });
+        });
+
+        // Update state with voting data
+        state.votingData = votingMap;
+
         const agentGrid = document.getElementById('agentGrid');
         if (agentGrid) {
             agentGrid.innerHTML = data.data
-                .map(agent => createAgentCard(agent, state.currentTab))
+                .map(agent => createAgentCard(agent, state.currentTab, votingMap.get(agent.id)))
                 .join('');
         }
+
+        // Get all agent IDs
+        const agentIds = data.data.map(agent => agent.id);
+
+        // Initialize flag counts
+        await window.voting.initializeFlagCounts(agentIds);
 
         updatePagination();
 
@@ -215,20 +163,7 @@ async function fetchAgents() {
     }
 }
 
-// UI Updates
-function showLoading() {
-    const agentGrid = document.getElementById('agentGrid');
-    if (agentGrid) {
-        agentGrid.innerHTML = '<div class="loading">Loading agents...</div>';
-    }
-}
 
-function showError(message) {
-    const agentGrid = document.getElementById('agentGrid');
-    if (agentGrid) {
-        agentGrid.innerHTML = `<div class="error">${message}</div>`;
-    }
-}
 
 function updatePagination() {
     const paginationElement = document.getElementById('pagination');
@@ -249,12 +184,48 @@ function updatePagination() {
     `;
 }
 
-// Navigation
 async function changePage(newPage) {
     if (newPage < 1 || newPage > state.totalPages) return;
     state.currentPage = newPage;
     await fetchAgents();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Initialize Application
+function initializeApp() {
+    // Initialize favorites count
+    updateFavoritesCount();
+
+    // Set initial theme
+    setTheme('dark');
+
+    // Initialize prices
+    fetchPrices();
+    setInterval(fetchPrices, 60000);
+
+    // Set up tab buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => switchTab(button.dataset.tab));
+    });
+
+    // Load initial tab
+    const savedTab = localStorage.getItem('currentTab') || 'prototype';
+    switchTab(savedTab);
+}
+
+// Tab Management
+function switchTab(tabName) {
+    if (!tabName || !API_CONFIG[tabName]) return;
+
+    state.currentTab = tabName;
+    state.currentPage = 1;
+    localStorage.setItem('currentTab', tabName);
+
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.toggle('active', button.dataset.tab === tabName);
+    });
+
+    fetchAgents();
 }
 
 // Initialize when DOM is ready
