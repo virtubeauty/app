@@ -1,0 +1,425 @@
+/* voting.css */
+
+/* Voting Controls Container */
+.voting-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+}
+
+/* Vote Buttons */
+.vote-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9em;
+    position: relative;
+}
+
+/* Premium Required Indicator */
+.vote-button::after {
+    content: '⭐';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--accent-1);
+    color: white;
+    font-size: 0.7em;
+    padding: 2px;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.vote-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.vote-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Only show premium indicator when wallet is connected but not premium */
+.wallet-connected:not(.wallet-premium) .vote-button:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Hide premium indicator for premium users */
+.wallet-premium .vote-button::after {
+    display: none;
+}
+
+/* Specific button styles */
+.vote-button.upvote:hover {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+.vote-button.downvote:hover {
+    background: #f44336;
+    border-color: #f44336;
+    color: white;
+}
+
+.vote-button.flag:hover {
+    background: #ff9800;
+    border-color: #ff9800;
+    color: white;
+}
+
+.vote-button.flag-details {
+    background: var(--accent-1);
+    color: white;
+    border-color: var(--accent-1);
+}
+
+.vote-button.flag-details:hover {
+    background: var(--button-hover);
+    border-color: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+}
+
+/* Vote counts and ratio */
+.upvote-count,
+.downvote-count,
+.flag-count {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.vote-ratio {
+    margin-left: auto;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+/* Flag Dialog */
+.flag-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+.flag-dialog-content {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+.flag-dialog h3 {
+    margin-bottom: 16px;
+    color: var(--text-primary);
+    font-size: 1.2em;
+}
+
+.flag-reason {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+    transition: border-color 0.2s ease;
+}
+
+.flag-reason:focus {
+    outline: none;
+    border-color: var(--accent-1);
+    box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.1);
+}
+
+.flag-dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.flag-dialog button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.submit-flag {
+    background: var(--accent-1);
+    color: white;
+}
+
+.submit-flag:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+}
+
+.cancel-flag {
+    background: var(--border);
+    color: var(--text-primary);
+}
+
+.cancel-flag:hover {
+    background: var(--text-secondary);
+    color: white;
+}
+
+/* Flags Modal */
+.flags-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.flags-modal.show {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    visibility: visible;
+}
+
+.flags-modal-content {
+    background: var(--card-bg);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flags-modal-content.show {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.flags-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.flags-modal-header h3 {
+    color: var(--text-primary);
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.flags-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.flags-modal-close:hover {
+    background: var(--accent-1);
+    color: white;
+}
+
+.flags-list {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+.flag-item {
+    background: var(--background);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    animation: slideIn 0.3s ease forwards;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.flag-item:last-child {
+    margin-bottom: 0;
+}
+
+.flag-item .flag-reason {
+    margin: 0 0 10px 0;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.flag-item .flag-timestamp {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.flags-empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add animation delay for each flag item */
+.flag-item:nth-child(1) { animation-delay: 0.1s; }
+.flag-item:nth-child(2) { animation-delay: 0.2s; }
+.flag-item:nth-child(3) { animation-delay: 0.3s; }
+.flag-item:nth-child(4) { animation-delay: 0.4s; }
+.flag-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* Scrollbar Styles */
+.flags-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.flags-list::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: 4px;
+}
+
+.flags-list::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.flags-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-1);
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .flag-dialog,
+[data-theme="dark"] .flags-modal {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .flag-dialog-content,
+[data-theme="dark"] .flags-modal-content {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .voting-controls {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .vote-button {
+        font-size: 0.85em;
+        padding: 6px 10px;
+    }
+
+    .flag-dialog-content,
+    .flags-modal-content {
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .flags-list {
+        max-height: calc(100vh - 140px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .voting-controls {
+        justify-content: center;
+    }
+
+    .vote-ratio {
+        width: 100%;
+        text-align: center;
+        margin: 5px 0 0 0;
+    }
+}

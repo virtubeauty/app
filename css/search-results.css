@@ -70,3 +70,13 @@
         gap: 15px;
     }
 }
+
+.no-results {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-style: italic;
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin: 20px 0;
+}
