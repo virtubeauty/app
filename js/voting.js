@@ -36,7 +36,7 @@ function getVotingApiUrl(endpoint) {
 
 // Handle voting (upvote/downvote)
 async function handleVote(itemId, voteType) {
-    //if (!checkPremiumAccess()) return;
+    if (!checkPremiumAccess()) return;
 
     if (itemId == 17777) {
         window.open('https://vbeaideas.featurebase.app/', '_blank'); // '_blank' yeni sekmede açar.
