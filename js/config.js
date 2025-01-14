@@ -8,7 +8,7 @@ const API_CONFIG = {
             'sort[0]': 'virtualTokenValue:desc',
             'sort[1]': 'createdAt:desc',
             'populate[0]': 'image',
-            'pagination[pageSize]': '66'
+            'pagination[pageSize]': '12'
         }
     },
     latest: {
@@ -19,7 +19,7 @@ const API_CONFIG = {
             'sort[0]': 'createdAt:desc',
             'sort[1]': 'createdAt:desc',
             'populate[0]': 'image',
-            'pagination[pageSize]': '66'
+            'pagination[pageSize]': '12'
         }
     },
     sentient: {
@@ -31,7 +31,7 @@ const API_CONFIG = {
             'sort[0]': 'totalValueLocked:desc',
             'sort[1]': 'createdAt:desc',
             'populate[0]': 'image',
-            'pagination[pageSize]': '66'
+            'pagination[pageSize]': '12'
         }
     },
     favorites: {
@@ -44,9 +44,9 @@ const API_CONFIG = {
             'pagination[pageSize]': '20'
         }
     },
-    voting: {
+    virtubeautyapi: {
         //baseUrl: 'https://localhost:7162',
-        baseUrl: 'https://virtubeautyapi-bkd2axcgg5ejfehj.germanywestcentral-01.azurewebsites.net',
+        baseUrl: 'https://virtubeautyapi-bkd2axcgg5ejfehj.germanywestcentral-01.azurewebsites.net/',
         endpoints: {
             upvote: '/api/voting/upvote',
             downvote: '/api/voting/downvote',

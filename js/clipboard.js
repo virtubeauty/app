@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (fullAddress) {
                 copyAddress(agentAddress, fullAddress);
-                console.log(`Copied: ${fullAddress}`);
             } else {
                 console.error('Address not found!');
             }

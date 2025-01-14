@@ -2,7 +2,7 @@
 .search-results-container {
     max-width: 1400px; /* Match agent-grid max-width */
     margin: 20px auto;
-    padding: 0 20px; /* Match agent-grid padding */
+    padding: 20px; /* Match agent-grid padding */
     background: var(--card-bg);
     border-radius: 16px;
     box-shadow: 0 4px 12px var(--shadow);

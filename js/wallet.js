@@ -1,4 +1,4 @@
-// wallet.js
+// Constants
 const PREMIUM_FAVORITE_LIMIT = 50;
 const REGULAR_FAVORITE_LIMIT = 5;
 const PREMIUM_THRESHOLD = 100000; // Required VBEA for premium
@@ -32,6 +32,7 @@ class WalletConnect {
         this.provider = null;
         this.chainId = null;
         this.web3 = null;
+        this.authManager = window.authManager;
         this.initializeWalletConnect();
     }
 
@@ -55,6 +56,12 @@ class WalletConnect {
                 this.account = accounts[0];
                 this.chainId = await this.provider.request({ method: 'eth_chainId' });
                 await this.checkPremiumStatus();
+
+                // Check if user is authenticated
+                if (this.authManager && !await this.authManager.checkSession()) {
+                    this.account = null;
+                    this.chainId = null;
+                }
             }
         } catch (error) {
             console.error('Error checking connection:', error);
@@ -64,7 +71,7 @@ class WalletConnect {
     setupEventListeners() {
         this.provider.on('accountsChanged', async (accounts) => {
             if (accounts.length === 0) {
-                this.handleDisconnect();
+                await this.handleDisconnect();
             } else {
                 this.account = accounts[0];
                 await this.checkPremiumStatus();
@@ -80,8 +87,8 @@ class WalletConnect {
             this.showToast('Network changed', 'success');
         });
 
-        this.provider.on('disconnect', () => {
-            this.handleDisconnect();
+        this.provider.on('disconnect', async () => {
+            await this.handleDisconnect();
             this.showToast('Wallet disconnected', 'info');
         });
     }
@@ -93,9 +100,16 @@ class WalletConnect {
         }
 
         try {
+            // First connect wallet
             const accounts = await this.provider.request({ method: 'eth_requestAccounts' });
             this.account = accounts[0];
             this.chainId = await this.provider.request({ method: 'eth_chainId' });
+
+            // Then authenticate with SIWE
+            if (this.authManager) {
+                await this.authManager.signIn();
+            }
+
             await this.checkPremiumStatus();
             this.updateUI();
             this.showToast('Wallet connected successfully!', 'success');
@@ -224,10 +238,19 @@ class WalletConnect {
         });
     }
 
-    handleDisconnect() {
+    async handleDisconnect() {
+        // Sign out from SIWE if authenticated
+        if (this.authManager) {
+            await this.authManager.signOut();
+        }
+
         this.account = null;
         this.isPremium = false;
         this.chainId = null;
+        localStorage.removeItem('auth_token');
+        window.walletConnect.token = null;
+        window.walletConnect.account = null;
+        window.walletConnect.updateUI();
         localStorage.removeItem('walletPremium');
         this.updateFavoriteLimit();
         this.updateUI();
@@ -249,10 +272,7 @@ class WalletConnect {
 
     async disconnectWallet() {
         try {
-            if (this.provider?.disconnect) {
-                await this.provider.disconnect();
-            }
-            this.handleDisconnect();
+            await this.handleDisconnect();
             this.showToast('Wallet disconnected successfully', 'success');
 
             setTimeout(() => {
@@ -302,10 +322,12 @@ class WalletConnect {
     }
 
     async updateUI() {
-        const container = document.querySelector('.wallet-container');
+        const container = document.querySelector('.auth-container');
         if (!container) return;
 
-        if (this.account) {
+        const isAuthenticated = this.authManager ? await this.authManager.checkSession() : false;
+
+        if (this.account && isAuthenticated) {
             const networkInfo = await this.getNetworkInfo();
             const networkClass = networkInfo.isCorrectNetwork ? 'network-badge' : 'network-badge wrong-network';
 
@@ -399,7 +421,6 @@ class WalletConnect {
     }
 }
 
-// Initialize wallet connection and setup click outside handling
 document.addEventListener('DOMContentLoaded', () => {
     window.walletConnect = new WalletConnect();
 
@@ -422,4 +443,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // Handle network change events
+    window.ethereum?.on('chainChanged', () => {
+        window.location.reload();
+    });
+
+    // Handle toast events
+    window.addEventListener('showToast', (event) => {
+        const { message, type } = event.detail;
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    });
+
+    // Check if there's a pending authentication from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('auth_callback')) {
+        window.walletConnect.handleAuthCallback().catch(console.error);
+    }
 });

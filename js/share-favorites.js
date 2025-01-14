@@ -108,7 +108,7 @@ async function handleSharedFavorites() {
             const params = new URLSearchParams();
             agentIds.forEach(id => params.append('itemIds', id));
 
-            const votingResponse = await fetch(`${API_CONFIG.voting.baseUrl}/api/voting/batch-vote-counts?${params}`);
+            const votingResponse = await fetch(`${API_CONFIG.virtubeautyapi.baseUrl}/api/voting/batch-vote-counts?${params}`);
             if (votingResponse.ok) {
                 votingResults = await votingResponse.json();
             }

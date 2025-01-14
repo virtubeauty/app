@@ -19,7 +19,7 @@ async function fetchPrices(useMockData = false) {
         if (useMockData) {
             const mockData = {
                 "ethereum": { "usd": 3607.21 },
-                "virtual-protocol": { "usd": 4.25 }
+                "virtual-protocol": { "usd": 3.00 }
             };
             state.prices['virtual-protocol'] = mockData['virtual-protocol']?.usd || 0;
             state.prices['ethereum'] = mockData['ethereum']?.usd || 0;
@@ -120,42 +120,22 @@ async function fetchAgents() {
         state.totalPages = data.meta.pagination.pageCount;
         state.tabCounts[state.currentTab] = data.meta.pagination.total;
 
-        // Fetch voting data in batch
-        let votingParams = new URLSearchParams();
-        data.data.forEach(agent => {
-            votingParams.append('itemIds', agent.id);
-        });
-
-        const votingResponse = await fetch(`${API_CONFIG.voting.baseUrl}/api/voting/batch-vote-counts?${votingParams}`);
-        const votingResults = votingResponse.ok ? await votingResponse.json() : [];
-
-        // Create a map of voting data
-        const votingMap = new Map();
-        data.data.forEach((agent, index) => {
-            votingMap.set(agent.id, votingResults[index] || {
-                upvoteCount: 0,
-                downvoteCount: 0,
-                upvoteRatio: 0
-            });
-        });
-
-        // Update state with voting data
-        state.votingData = votingMap;
-
         const agentGrid = document.getElementById('agentGrid');
         if (agentGrid) {
             agentGrid.innerHTML = data.data
-                .map(agent => createAgentCard(agent, state.currentTab, votingMap.get(agent.id)))
+                .map(agent => createAgentCard(agent, state.currentTab))
                 .join('');
         }
 
         // Get all agent IDs
         const agentIds = data.data.map(agent => agent.id);
 
+        updatePagination();
+
+
         // Initialize flag counts
         await window.voting.initializeFlagCounts(agentIds);
-
-        updatePagination();
+        await window.voting.initializeVotingCounts(agentIds);
 
     } catch (error) {
         console.error('Error fetching agents:', error);

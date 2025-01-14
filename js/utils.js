@@ -99,3 +99,11 @@ function formatNumber(num) {
     }
     return num.toString();
 }
+
+function formatPercent(token) {
+    ////
+    var numericToken = parseFloat(token.replace(/,/g, ''));
+
+    // Hesaplama
+    return (numericToken / 1000000000).toFixed(2);
+}
