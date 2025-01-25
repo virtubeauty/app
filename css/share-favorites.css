@@ -60,7 +60,8 @@
 /* Shared Favorites Container */
 .shared-favorites-container {
     max-width: 1400px;
-    margin: 20px auto;
+    margin-left: 260px;
+    margin-top: 100px;
     padding: 20px;
     background: var(--card-bg);
     border-radius: 16px;

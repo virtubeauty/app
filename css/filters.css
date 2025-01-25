@@ -1,7 +1,7 @@
 /* filters.css */
 .filters-container {
     max-width: 1400px;
-    margin: 20px auto;
+    margin: 20px;
     padding: 20px;
     background: var(--card-bg);
     border-radius: 16px;
